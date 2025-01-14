@@ -1,41 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vkhut <vkhut@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/14 17:20:57 by vkhut             #+#    #+#             */
+/*   Updated: 2025/01/14 19:54:56 by vkhut            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-void	draw_fractal(t_fractol *fractol)
+t_fractol	*init_fract_struc(t_fractol_type type)
 {
-	if (fractol->type == MANDELBROT)
-		draw_mandelbrot(fractol);
-	else if (fractol->type == JULIA)
-		draw_julia(fractol);
-	mlx_image_to_window(fractol->mlx, fractol->img, 0, 0);
-}
+	t_fractol	*fractol;
 
-int	get_color(int iter, int max_iterate, int color_scheme)
-{
-	double	t;
-	int		r;
-	int		g;
-	int		b;
-
-	t = (double)iter / (double)max_iterate;
-	if (color_scheme == 1)
+	fractol = (t_fractol *)malloc(sizeof(t_fractol));
+	if (!fractol)
+		return (NULL);
+	fractol->type = type;
+	fractol->zoom = 1.0;
+	fractol->offset_x = 0.0;
+	fractol->offset_y = 0.0;
+	fractol->max_iterate = 200;
+	fractol->color_scheme = 4;
+	fractol->mlx = NULL;
+	fractol->img = NULL;
+	if (type == JULIA)
 	{
-		r = (int)(255 * 9 * (1 - t) * t * t * t);
-		g = (int)(255 * 15 * (1 - t) * (1 - t) * t * t);
-		b = (int)(255 * 8.5 * (1 - t) * (1 - t) * (1 - t) * t);
+		rand_julia_const(fractol);
 	}
-	else if (color_scheme == 2)
-	{
-		r = (int)(255 * 15 * (1 - t) * t * t * t);
-		g = (int)(255 * 8.5 * (1 - t) * (1 - t) * t * t);
-		b = (int)(255 * 9 * (1 - t) * (1 - t) * (1 - t) * t);
-	}
-	else
-	{
-		r = (int)(255 * 8.5 * (1 - t) * t * t * t);
-		g = (int)(255 * 9 * (1 - t) * (1 - t) * t * t);
-		b = (int)(255 * 8.5 * (1 - t) * (1 - t) * (1 - t) * t);
-	}
-	return ((r << 16) | (g << 8) | b);
+	return (fractol);
 }
 
 void	cleanup(t_fractol *fractol)
@@ -44,9 +40,37 @@ void	cleanup(t_fractol *fractol)
 	{
 		if (fractol->mlx)
 		{
-			mlx_delete_image(fractol->mlx, fractol->img);
+			if (fractol->img)
+			{
+				mlx_delete_image(fractol->mlx, fractol->img);
+			}
 			mlx_terminate(fractol->mlx);
 		}
 		free(fractol);
+	}
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
+	{
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+t_fractol_type	parse_fractal_type(const char *arg)
+{
+	if (ft_strcmp(arg, "mandelbrot") == 0)
+		return (MANDELBROT);
+	else if (ft_strcmp(arg, "julia") == 0)
+		return (JULIA);
+	else
+	{
+		printf("Invalid fractal type. Use 'mandelbrot' or 'julia'.\n");
+		exit(EXIT_FAILURE);
 	}
 }

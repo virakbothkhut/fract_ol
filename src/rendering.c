@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rendering.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vkhut <vkhut@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/14 17:20:52 by vkhut             #+#    #+#             */
+/*   Updated: 2025/01/14 17:43:02 by vkhut            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 void	handle_mouse(double xdelta, double ydelta, void *param)
@@ -33,7 +45,7 @@ void	handle_keyboard(mlx_key_data_t keydata, void *param)
 		mlx_close_window(fractol->mlx);
 	keys_handle_move(keydata, fractol);
 	keys_handle_zoom(keydata, fractol);
-	key_handle_random_julia(keydata, fractol);
+	key_handle_rd_julia(keydata, fractol);
 	draw_fractal(fractol);
 }
 
@@ -65,7 +77,7 @@ void	keys_handle_zoom(mlx_key_data_t keydata, t_fractol *fractol)
 		fractol->zoom /= 1.1;
 }
 
-void	key_handle_random_julia(mlx_key_data_t keydata, t_fractol *fractol)
+void	key_handle_rd_julia(mlx_key_data_t keydata, t_fractol *fractol)
 {
 	if (keydata.key == MLX_KEY_R)
 	{

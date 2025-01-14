@@ -6,7 +6,7 @@
 /*   By: vkhut <vkhut@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 22:46:39 by vkhut             #+#    #+#             */
-/*   Updated: 2025/01/13 23:09:33 by vkhut            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:55:47 by vkhut            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,39 +49,38 @@ typedef struct s_fractol
 }	t_fractol;
 
 // fractol
-t_fractol		*init_fractol(t_fractol_type type);
-void			draw_fractol_update(t_fractol *fractol);
 int				init_mlx(t_fractol *fractol);
 void			setup_hooks(t_fractol *fractol);
-void			cleanup(t_fractol *fractol);
-t_fractol_type	parse_fractal_type(const char *arg);
-int	get_color(int iter, int max_iterate, int color_scheme);
-
+void			draw_fractal(t_fractol *fractol);
+void			draw_fractol_update(t_fractol *fractol);
+t_fractol		*init_fractol(t_fractol_type type);
 
 // mandelbrot
 void			draw_mandelbrot(t_fractol *fractol);
+int				calculate_mandelbrot(t_fractol *fractol, int x, int y);
 
 //julia
-// int				get_color(int iter, int max_iterate, int color_scheme);
 void			draw_julia(t_fractol *fractol);
-void			rand_julia_const(t_fractol *fractol);
-t_fractol		*init_fract_struc(t_fractol_type type);
 t_complex		map_complex_plan(int x, int y, t_fractol *fractol);
 int				iter_frac(t_complex *z, t_fractol *fractol);
+void			rand_julia_const(t_fractol *fractol);
 
 //rendering
-void			draw_fractal(t_fractol *fractol);
-void			keys_handle_move(mlx_key_data_t keydata, t_fractol *fractol);
-void			keys_handle_zoom(mlx_key_data_t keydata, t_fractol *fractol);
-void			key_handle_random_julia(mlx_key_data_t keydata, t_fractol *fractol);
-
-//input
 void			handle_mouse(double xdelta, double ydelta, void *param);
 void			handle_keyboard(mlx_key_data_t keydata, void *param);
+void			keys_handle_move(mlx_key_data_t keydata, t_fractol *fractol);
+void			keys_handle_zoom(mlx_key_data_t keydata, t_fractol *fractol);
+void			key_handle_rd_julia(mlx_key_data_t keydata, t_fractol *fractol);
+
+//utils
+void			cleanup(t_fractol *fractol);
+int				ft_strcmp(const char *s1, const char *s2);
+t_fractol		*init_fract_struc(t_fractol_type type);
+t_fractol_type	parse_fractal_type(const char *arg);
 
 //main 
 int				key_hook(int keycode, void *param);
 void			close_hook(void *param);
+int				get_color(int iter, int max_iterate, int color_scheme);
 
-int				calculate_mandelbrot(t_fractol *fractol, int x, int y);
 #endif

@@ -6,25 +6,11 @@
 /*   By: vkhut <vkhut@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 22:51:51 by vkhut             #+#    #+#             */
-/*   Updated: 2025/01/13 22:51:52 by vkhut            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:55:24 by vkhut            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-int	init_mlx(t_fractol *fractol)
-{
-	fractol->mlx = mlx_init(WIDTH, HEIGHT, "Fractol", true);
-	if (!fractol->mlx)
-		return (0);
-	fractol->img = mlx_new_image(fractol->mlx, WIDTH, HEIGHT);
-	if (!fractol->img)
-	{
-		mlx_terminate(fractol->mlx);
-		return (0);
-	}
-	return (1);
-}
 
 void	setup_hooks(t_fractol *fractol)
 {
@@ -36,6 +22,15 @@ void	setup_hooks(t_fractol *fractol)
 void	draw_fractol_update(t_fractol *fractol)
 {
 	draw_fractal(fractol);
+	mlx_image_to_window(fractol->mlx, fractol->img, 0, 0);
+}
+
+void	draw_fractal(t_fractol *fractol)
+{
+	if (fractol->type == MANDELBROT)
+		draw_mandelbrot(fractol);
+	else if (fractol->type == JULIA)
+		draw_julia(fractol);
 	mlx_image_to_window(fractol->mlx, fractol->img, 0, 0);
 }
 
@@ -55,15 +50,16 @@ t_fractol	*init_fractol(t_fractol_type type)
 	return (fractol);
 }
 
-t_fractol_type	parse_fractal_type(const char *arg)
+int	init_mlx(t_fractol *fractol)
 {
-	if (strcmp(arg, "mandelbrot") == 0)
-		return (MANDELBROT);
-	else if (strcmp(arg, "julia") == 0)
-		return (JULIA);
-	else
+	fractol->mlx = mlx_init(WIDTH, HEIGHT, "Fractol", true);
+	if (!fractol->mlx)
+		return (0);
+	fractol->img = mlx_new_image(fractol->mlx, WIDTH, HEIGHT);
+	if (!fractol->img)
 	{
-		printf("Invalid fractal type. Use 'mandelbrot' or 'julia'.\n");
-		exit(EXIT_FAILURE);
+		mlx_terminate(fractol->mlx);
+		return (0);
 	}
+	return (1);
 }

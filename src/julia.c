@@ -6,7 +6,7 @@
 /*   By: vkhut <vkhut@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 22:52:03 by vkhut             #+#    #+#             */
-/*   Updated: 2025/01/13 23:15:00 by vkhut            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:30:35 by vkhut            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,28 +60,6 @@ int	iter_frac(t_complex *z, t_fractol *fractol)
 		iter++;
 	}
 	return (iter);
-}
-
-t_fractol	*init_fract_struc(t_fractol_type type)
-{
-	t_fractol	*fractol;
-
-	fractol = (t_fractol *)malloc(sizeof(t_fractol));
-	if (!fractol)
-		return (NULL);
-	fractol->type = type;
-	fractol->zoom = 1.0;
-	fractol->offset_x = 0.0;
-	fractol->offset_y = 0.0;
-	fractol->max_iterate = 200;
-	fractol->color_scheme = 4.5;
-	fractol->mlx = NULL;
-	fractol->img = NULL;
-	if (type == JULIA)
-	{
-		rand_julia_const(fractol);
-	}
-	return (fractol);
 }
 
 void	rand_julia_const(t_fractol *fractol)
